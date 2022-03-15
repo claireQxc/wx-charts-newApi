@@ -1,4 +1,6 @@
 <view class="container">
-    <canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" bindtouchstart="touchHandler"></canvas>
+    <canvas 
+    type="2d" id="lineCanvas" canvas-id="lineCanvas" disable-scroll="true" class="canvas" bindtouchstart="touchHandler"></canvas>
+    <image src="{{testUrl}}" />
     <button type="primary" bindtap="updateData">更新数据</button>
 </view>

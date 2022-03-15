@@ -27,7 +27,8 @@ Page({
                 data: [32, 45, null, 56, 33, 34],
                 format: function (val) {
                     return val.toFixed(2) + '万';
-                }
+                },
+                linearGradientColor: ["#49D0FF","#3D9CF4"]
             }],
             yAxis: {
                 title: '成交金额 (万元)',

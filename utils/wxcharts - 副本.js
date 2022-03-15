@@ -7,7 +7,7 @@
  * Designed and built with all the love of Web
  */
 
-// 'use strict';
+'use strict';
 
 var config = {
     yAxisWidth: 15,
@@ -34,7 +34,7 @@ var config = {
     toolTipLineHeight: 14,
     radarGridCount: 3,
     radarLabelTextMargin: 15,
-    splitLine: false,
+    splitLine:true,
 };
 
 // Object.assign polyfill
@@ -539,7 +539,7 @@ function calCategoriesData(categories, opts, config) {
 
     var maxTextLength = Math.max.apply(this, categoriesTextLenth);
 
-    var planEachSpacing = eachSpacing * ((opts.xAxis.interval || 0) + 1);
+    var planEachSpacing = eachSpacing*((opts.xAxis.interval || 0)+1);
 
     if (maxTextLength + 2 * config.xAxisTextPadding > planEachSpacing) {
         result.angle = 45 * Math.PI / 180;
@@ -985,10 +985,10 @@ function drawToolTip(textList, offset, opts, config, context) {
         y: 0
     }, offset);
     offset.y -= 8;
-    var toolTipLineHeight = 0;
+    var toolTipLineHeight =0;
     var textWidth = textList.map(function (item) {
-        var text = item.text.indexOf('/r') > -1 ? item.text.split('/r') : [item.text];
-        toolTipLineHeight = toolTipLineHeight + text.length * config.toolTipLineHeight + (text.length - 1) * 10;
+        var text=item.text.indexOf('/r')>-1?item.text.split('/r'):[item.text];
+        toolTipLineHeight = toolTipLineHeight+text.length*config.toolTipLineHeight+(text.length-1)*10;
         return Math.max(measureText(text[0]),measureText(text[1] || ''));
     });
 
@@ -1003,7 +1003,7 @@ function drawToolTip(textList, offset, opts, config, context) {
     // draw background rect
     context.beginPath();
     context.fillStyle = (opts.tooltip.option.background || config.toolTipBackground);
-    context.globalAlpha = (opts.tooltip.option.toolTipOpacity || config.toolTipOpacity);
+    context.globalAlpha = config.toolTipOpacity;
     if (isOverRightBorder) {
         context.moveTo(offset.x, offset.y + 10);
         context.lineTo(offset.x - arrowWidth, offset.y + 10 - 5);
@@ -1032,9 +1032,9 @@ function drawToolTip(textList, offset, opts, config, context) {
         context.shadowColor = 'rgba(2,4,36,0.12)'; // 阴影颜色
         context.shadowBlur = 8; // 阴影模糊范围
         /***** */
-        if(opts.tooltip.option.radius) {
+        if(opts.tooltip.option.radius){
             roundedRect(context,offset.x + arrowWidth, offset.y, toolTipWidth, toolTipHeight,opts.tooltip.option.radius);
-        } else {
+        }else{
             context.fillRect(offset.x + arrowWidth, offset.y, toolTipWidth, toolTipHeight);
         }
     }
@@ -1051,11 +1051,11 @@ function drawToolTip(textList, offset, opts, config, context) {
         if (isOverRightBorder) {
             startX = offset.x - toolTipWidth - arrowWidth + 2 * config.toolTipPadding;
         }
-        if (opts.tooltip.option.legendType == 'circle'){
-            startY = offset.y + config.toolTipLineHeight / 2 + config.toolTipLineHeight * index + config.toolTipPadding;
+        if(opts.tooltip.option.legendType == 'circle'){
+            startY = offset.y + config.toolTipLineHeight/2 + config.toolTipLineHeight * index + config.toolTipPadding;
             context.arc(startX, startY, 3, 0, 2 * Math.PI);
             context.fill();
-        } else {
+        }else{
             context.fillRect(startX, startY, legendWidth, config.fontSize);
         }
         context.closePath();
@@ -1072,11 +1072,11 @@ function drawToolTip(textList, offset, opts, config, context) {
         }
         var startY = offset.y + (config.toolTipLineHeight - config.fontSize) / 2 + config.toolTipLineHeight * index + config.toolTipPadding;
 
-        var firstText = item.text.indexOf('/r') > -1 ? item.text.split('/r')[0] : item.text;
-        var subText = item.text.indexOf('/r') > -1 ? item.text.split('/r')[1] : '';
+        var firstText = item.text.indexOf('/r')>-1?item.text.split('/r')[0]:item.text;
+        var subText = item.text.indexOf('/r')>-1?item.text.split('/r')[1]:'';
 
         context.fillText(firstText, startX, startY + config.fontSize);
-        subText?context.fillText(subText, startX, startY + config.fontSize * 2 + 10):'';
+        subText?context.fillText(subText, startX, startY + config.fontSize*2+10):'';
     });
     context.stroke();
     context.closePath();
@@ -1139,17 +1139,15 @@ function drawColumnDataPoints(series, opts, config, context) {
             var grd = context.createLinearGradient(0,0,0,250);
             grd.addColorStop(0, eachSeries.linearGradientColor[0]);
             grd.addColorStop(1, eachSeries.linearGradientColor[1]);
-            context.fillStyle = grd;
-        } else {
-            context.fillStyle = eachSeries.color;
         }
+        context.fillStyle = eachSeries.color;
         points.forEach(function (item, index) {
             if (item !== null) {
                 var startX = item.x - item.width / 2 + 1;
                 var height = opts.height - item.y - config.padding - config.xAxisHeight - config.legendHeight;
-                if (opts.extra.column.radius >0){
+                if(opts.extra.column.radius >0){
                     roundedRect(context, startX, item.y, item.width - 2, height,opts.extra.column.radius);
-                } else {
+                }else{
                     context.moveTo(startX, item.y);
                     context.rect(startX, item.y, item.width - 2, height);
                 }
@@ -1194,11 +1192,7 @@ function drawAreaDataPoints(series, opts, config, context) {
     if (opts._scrollDistance_ && opts._scrollDistance_ !== 0 && opts.enableScroll === true) {
         context.translate(opts._scrollDistance_, 0);
     }
-    console.log('opts.tooltip--------------->', opts.tooltip);
-    config.splitLine = config.splitLine;
-    if (opts.tooltip && opts.tooltip.option && opts.tooltip.option.splitLine !== undefined) {
-        config.splitLine = opts.tooltip.option.splitLine;
-    }
+    config.splitLine = opts.tooltip.option.splitLine !== undefined? opts.tooltip.option.splitLine : config.splitLine;
     if (config.splitLine && opts.tooltip.textList && opts.tooltip.textList.length && process === 1) {
         drawToolTipSplitLine(opts.tooltip.offset.x, opts, config, context);
     }
@@ -1252,12 +1246,10 @@ function drawAreaDataPoints(series, opts, config, context) {
                 context.lineTo(item.x - eachSpacing / 2, endY);
                 context.moveTo(item.x - eachSpacing / 2, item.y);
             }
-            if (eachSeries.linearGradientColor) {
-                var grd = context.createLinearGradient(0,0,0,200);
-                grd.addColorStop(0, eachSeries.linearGradientColor[0]);
-                grd.addColorStop(1, eachSeries.linearGradientColor[1]);
-                context.fillStyle = grd;
-            }
+            var grd = context.createLinearGradient(0,0,0,200);
+            grd.addColorStop(0,eachSeries.linearGradientColor[0]);
+            grd.addColorStop(1,eachSeries.linearGradientColor[1]);
+            context.fillStyle = grd;
             context.closePath();
             context.fill();
             context.globalAlpha = 1;
@@ -1382,7 +1374,7 @@ function drawXAxis(categories, opts, config, context) {
         startX = _getXAxisPoints4.startX,
         endX = _getXAxisPoints4.endX,
         eachSpacing = _getXAxisPoints4.eachSpacing;
-    var startY = opts.height - config.padding - config.xAxisHeight - config.legendHeight + (opts.xAxis.marginTop || 0);
+    var startY = opts.height - config.padding - config.xAxisHeight - config.legendHeight + opts.xAxis.marginTop || 0;
     var endY = startY + config.xAxisLineHeight;
 
     context.save();
@@ -1415,10 +1407,11 @@ function drawXAxis(categories, opts, config, context) {
     var validWidth = opts.width - 2 * config.padding - config.yAxisWidth - config.yAxisTitleWidth;
     var maxXAxisListLength = Math.min(categories.length, Math.ceil(validWidth / config.fontSize / 1.5));
     var ratio = Math.ceil(categories.length / maxXAxisListLength);
+
     categories = categories.map(function (item, index) {
         return index % ratio !== 0 ? '' : item;
     });
-    if (opts.xAxis.interval > 0) {
+    if(opts.xAxis.interval>0){
         categories = categories.map(function (item, index) {
             return index % (opts.xAxis.interval+1) !== 0 ? '' : item;
         });
@@ -1430,14 +1423,14 @@ function drawXAxis(categories, opts, config, context) {
         context.fillStyle = (opts.xAxis.fontColor || '#666666');
         categories.forEach(function (item, index) {
             var offset = eachSpacing / 2 - measureText(item) / 2;
-            var lastOffset = (eachSpacing - (measureText(item) + 1) * opts.scale);
-            if (opts.xAxis.interval > 0) {
-                if ((index+1) == categories.length) {
+            var lastOffset= (eachSpacing - (measureText(item)+1)*opts.scale);
+            if(opts.xAxis.interval>0){
+                if((index+1) == categories.length){
                     context.fillText(item, xAxisPoints[index]+lastOffset, startY + config.fontSize + 5);
-                } else {
+                }else{
                     context.fillText(item, xAxisPoints[index], startY + config.fontSize + 5);
                 }
-            } else {
+            }else{
                 context.fillText(item, xAxisPoints[index] + offset, startY + config.fontSize + 5);
             }
         });
@@ -1473,7 +1466,7 @@ function drawYAxisGrid(opts, config, context) {
     var eachSpacing = Math.floor(spacingValid / config.yAxisSplit);
     var yAxisTotalWidth = config.yAxisWidth + config.yAxisTitleWidth;
     var startX = config.padding + yAxisTotalWidth;
-    if (opts.yAxis.above) {
+    if(opts.yAxis.above){
         startX = config.padding;
     }
     var endX = opts.width - config.padding;
@@ -1485,8 +1478,8 @@ function drawYAxisGrid(opts, config, context) {
     points.push(config.padding + eachSpacing * config.yAxisSplit + 2);
 
     context.beginPath();
-    context.strokeStyle = opts.yAxis.gridColor || "#cccccc";
-    context.lineWidth = opts.yAxis.gridWidth || 1;
+    context.strokeStyle = opts.xAxis.gridColor || "#cccccc";
+    context.lineWidth = 1;
     points.forEach(function (item, index) {
         context.moveTo(startX, item);
         context.lineTo(endX, item);
@@ -1510,10 +1503,10 @@ function drawYAxis(series, opts, config, context) {
     var startX = config.padding + yAxisTotalWidth;
     var startY = 0;
     //
-    if (opts.yAxis.above) {
+    if(opts.yAxis.above){
         startX = config.padding;
     }
-    if (opts.xAxis && opts.xAxis.marginTop) {
+    if(opts.xAxis && opts.xAxis.marginTop){
         startY = opts.xAxis.marginTop;
     }
     var endX = opts.width - config.padding;
@@ -1537,9 +1530,9 @@ function drawYAxis(series, opts, config, context) {
     context.fillStyle = (opts.yAxis.fontColor || '#666666');
     rangesFormat.forEach(function (item, index) {
         var pos = points[index] ? points[index] : endY;
-        if (opts.yAxis.above) {
+        if(opts.yAxis.above){
             context.fillText(item, config.padding, pos - 2);
-        } else {
+        }else{
             context.fillText(item, config.padding + config.yAxisTitleWidth, pos + config.fontSize / 2);
         }
     });
@@ -2055,7 +2048,6 @@ var Charts = function Charts(opts) {
     config$$1.yAxisTitleWidth = opts.yAxis.disabled !== true && opts.yAxis.title ? config$$1.yAxisTitleWidth : 0;
     config$$1.pieChartLinePadding = opts.dataLabel === false ? 0 : config$$1.pieChartLinePadding;
     config$$1.pieChartTextPadding = opts.dataLabel === false ? 0 : config$$1.pieChartTextPadding;
-
     this.opts = opts;
     this.config = config$$1;
     // this.context = wx.createCanvasContext(opts.canvasId);
@@ -2067,13 +2059,16 @@ var Charts = function Charts(opts) {
         node: true,
         size: true,
       })
-      .exec(function(res) {
-        const canvas = res[0].node;
-        _this.context = canvas.getContext('2d');
-        const dpr = wx.getSystemInfoSync().pixelRatio;
-        canvas.width = opts.width * dpr;
-        canvas.height = opts.height * dpr;
-        _this.context.scale(dpr, dpr);
+      .exec(function(res) { 
+          console.log(res);
+          const width = opts.width
+          const height = opts.height
+          const canvas = res[0].node;
+          _this.context = canvas.getContext('2d');
+          const dpr = wx.getSystemInfoSync().pixelRatio
+          canvas.width = width * dpr
+          canvas.height = height * dpr
+          _this.context.scale(dpr, dpr) 
     
         // store calcuated chart data
         // such as chart point coordinate
@@ -2084,26 +2079,28 @@ var Charts = function Charts(opts) {
             startTouchX: 0,
             distance: 0
         };
+        console.log('1111', _this.context)
+        console.log('222',  _this.context.strokeStyle = '#000')
         drawCharts.call(_this, opts.type, opts, config$$1, _this.context);
     });
 };
 function configScale(opts){
-    config.yAxisWidth = 15 * (opts.scale || 1);
-    config.xAxisHeight = 15 * (opts.scale || 1);
-    config.xAxisLineHeight = 15 * (opts.scale || 1);
-    config.legendHeight = 15 * (opts.scale || 1);
-    config.yAxisTitleWidth = 15 * (opts.scale || 1);
-    config.padding = opts.padding !== undefined ? opts.padding : 12 * (opts.scale || 1);
-    config.columePadding = 3 * (opts.scale || 1);
-    config.fontSize = 10 * (opts.scale || 1);
-    config.pieChartLinePadding = 25 * (opts.scale || 1);
-    config.pieChartTextPadding = 15 * (opts.scale || 1);
-    config.xAxisTextPadding = 3 * (opts.scale || 1);
-    config.titleFontSize = 20 * (opts.scale || 1);
-    config.subtitleFontSize = 15 * (opts.scale || 1);
-    config.toolTipPadding = 3 * (opts.scale || 1);
-    config.toolTipLineHeight = 14 * (opts.scale || 1);
-    config.radarLabelTextMargin = 15 * (opts.scale || 1);
+    config.yAxisWidth = 15*(opts.scale || 1);
+    config.xAxisHeight = 15*(opts.scale || 1);
+    config.xAxisLineHeight = 15*(opts.scale || 1);
+    config.legendHeight = 15*(opts.scale || 1);
+    config.yAxisTitleWidth = 15*(opts.scale || 1);
+    config.padding = opts.padding!==undefined?opts.padding:12*(opts.scale || 1);
+    config.columePadding = 3*(opts.scale || 1);
+    config.fontSize = 10*(opts.scale || 1);
+    config.pieChartLinePadding = 25*(opts.scale || 1);
+    config.pieChartTextPadding = 15*(opts.scale || 1);
+    config.xAxisTextPadding = 3*(opts.scale || 1);
+    config.titleFontSize = 20*(opts.scale || 1);
+    config.subtitleFontSize = 15*(opts.scale || 1);
+    config.toolTipPadding = 3*(opts.scale || 1);
+    config.toolTipLineHeight = 14*(opts.scale || 1);
+    config.radarLabelTextMargin = 15*(opts.scale || 1);
 }
 
 Charts.prototype.updateData = function () {
@@ -2150,11 +2147,12 @@ Charts.prototype.showToolTip = function (e) {
     if (this.opts.type === 'line' || this.opts.type === 'area' || this.opts.type === 'column') {
         var index = this.getCurrentDataIndex(e);
         var currentOffset = this.scrollOption.currentOffset;
+
         var opts = assign({}, this.opts, {
             _scrollDistance_: currentOffset,
             animation: false
         });
-        option = opts.tooltip ? opts.tooltip.option ? assign(opts.tooltip.option, option) : option : option;
+        option = opts.tooltip?opts.tooltip.option?assign(opts.tooltip.option,option):option:option;
         if (index > -1) {
             var seriesData = getSeriesDataItem(this.opts.series, index);
             if (seriesData.length === 0) {

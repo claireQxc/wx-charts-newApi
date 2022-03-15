@@ -3,6 +3,7 @@
 		<view wx:if="{{!isMainChartDisplay}}" class="back-btn" bindtap="backToMainChart">返回</view>
 		{{chartTitle}}
 	</view>
-    <canvas canvas-id="columnCanvas" class="canvas" bindtouchstart="touchHandler"></canvas>
+    <canvas
+    type="2d" id="columnCanvas"  canvas-id="columnCanvas" class="canvas" bindtouchstart="touchHandler"></canvas>
     <view style="text-align:center">点击数据每一项查看详情</view>
 </view>

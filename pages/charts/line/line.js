@@ -3,6 +3,7 @@ var app = getApp();
 var lineChart = null;
 Page({
     data: {
+        testUrl: ''
     },
     touchHandler: function (e) {
         console.log(lineChart.getCurrentDataIndex(e));
@@ -27,17 +28,47 @@ Page({
         }
     },
     updateData: function () {
-        var simulationData = this.createSimulationData();
-        var series = [{
-            name: '成交量1',
-            data: simulationData.data,
-            format: function (val, name) {
-                return val.toFixed(2) + '万';
-            }
-        }];
-        lineChart.updateData({
-            categories: simulationData.categories,
-            series: series
+
+        // var simulationData = this.createSimulationData();
+        // var series = [{
+        //     name: '成交量1',
+        //     data: simulationData.data,
+        //     format: function (val, name) {
+        //         return val.toFixed(2) + '万';
+        //     }
+        // }];
+        // lineChart.updateData({
+        //     categories: simulationData.categories,
+        //     series: series
+        // });
+        let _this = this;
+        wx.createSelectorQuery()
+        .select('#lineCanvas')
+        .fields({
+            node: true,
+            size: true,
+        })
+        .exec(function(res) { 
+            console.log(res);
+            const canvas = res[0].node;
+            _this.context = canvas.getContext('2d'); 
+            const url = canvas.toDataURL();
+            _this.setData({
+                testUrl: url
+            });
+        
+            // store calcuated chart data
+            // such as chart point coordinate
+            // _this.chartData = {};
+            // _this.event = new Event();
+            // _this.scrollOption = {
+            //     currentOffset: 0,
+            //     startTouchX: 0,
+            //     distance: 0
+            // };
+            // console.log('1111', _this.context)
+            // console.log('222',  _this.context.strokeStyle = '#000')
+            // drawCharts.call(_this, opts.type, opts, config$$1, _this.context);
         });
     },
     onLoad: function (e) {
