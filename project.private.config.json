@@ -1,0 +1,31 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "area",
+          "pathName": "pages/charts/area/area",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "column",
+          "pathName": "pages/charts/column/column",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        }
+      ]
+    }
+  }
+}

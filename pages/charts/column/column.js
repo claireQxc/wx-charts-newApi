@@ -83,6 +83,7 @@ Page({
             series: [{
                 name: '成交量',
                 data: chartData.main.data,
+                linearGradientColor: ["#FF9A8A","rgba(255, 255, 255, 0.8)"],
                 format: function (val, name) {
                     return val.toFixed(2) + '万';
                 }

@@ -1134,17 +1134,9 @@ function drawColumnDataPoints(series, opts, config, context) {
         points = fixColumeData(points, eachSpacing, series.length, seriesIndex, config, opts);
 
         // 绘制柱状数据图
-        context.beginPath();
-        if (eachSeries.linearGradientColor) {
-            var grd = context.createLinearGradient(0,0,0,250);
-            grd.addColorStop(0, eachSeries.linearGradientColor[0]);
-            grd.addColorStop(1, eachSeries.linearGradientColor[1]);
-            context.fillStyle = grd;
-        } else {
-            context.fillStyle = eachSeries.color;
-        }
         points.forEach(function (item, index) {
             if (item !== null) {
+                context.beginPath();        
                 var startX = item.x - item.width / 2 + 1;
                 var height = opts.height - item.y - config.padding - config.xAxisHeight - config.legendHeight;
                 if (opts.extra.column.radius >0){
@@ -1153,11 +1145,20 @@ function drawColumnDataPoints(series, opts, config, context) {
                     context.moveTo(startX, item.y);
                     context.rect(startX, item.y, item.width - 2, height);
                 }
+                if (eachSeries.linearGradientColor) {
+                    var grd = context.createLinearGradient(startX, item.y, startX, item.y + height);
+                    grd.addColorStop(0, eachSeries.linearGradientColor[0]);
+                    grd.addColorStop(1, eachSeries.linearGradientColor[1]);
+                    context.fillStyle = grd;
+                } else {
+                    context.fillStyle = eachSeries.color;
+                }
+                context.closePath();
+                context.fill();
             }
         });
-        context.closePath();
-        context.fill();
     });
+
     series.forEach(function (eachSeries, seriesIndex) {
         var data = eachSeries.data;
         var points = getDataPoints(data, minRange, maxRange, xAxisPoints, eachSpacing, opts, config, process);
